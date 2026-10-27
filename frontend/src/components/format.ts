@@ -75,10 +75,11 @@ export function isoToLocalInput(iso: string): string {
   )
 }
 
-/** Human-readable status: EXPECTED -> "Expected". */
+/** Human-readable label: EXPECTED -> "Expected", startsAt -> "Starts At". */
 export function humanize(status: string | null | undefined): string {
   if (!status) return '—'
   return status
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
     .toLowerCase()
     .split('_')
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))

@@ -45,8 +45,8 @@ describe('formatMoney', () => {
     expect(formatted).toMatch(/R|ZAR/)
   })
 
-  it('falls back to amount-plus-code for unknown currencies', () => {
-    expect(formatMoney(10, 'XXX')).toContain('XXX')
+  it('falls back to amount-plus-code for invalid currency codes', () => {
+    expect(formatMoney(10, 'ZZ9')).toBe('10 ZZ9')
   })
 })
 
@@ -54,6 +54,7 @@ describe('humanize', () => {
   it('turns status codes into readable labels', () => {
     expect(humanize('EXPECTED')).toBe('Expected')
     expect(humanize('CONTRIBUTIONS_CONFIRM')).toBe('Contributions Confirm')
+    expect(humanize('startsAt')).toBe('Starts at')
     expect(humanize(null)).toBe('—')
   })
 })

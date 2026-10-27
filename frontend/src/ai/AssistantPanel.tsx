@@ -40,10 +40,13 @@ export function AssistantPanel(): React.JSX.Element | null {
       .then(([status, consents]) => {
         setAvailable(status.available)
         setStatusDetail(status.detail)
-        setConsentGranted(consents.some((c) => c.purpose === 'AI_ASSISTANCE' && c.granted))
+        setConsentGranted(
+          Object.values(consents ?? {}).some((c) => c.purpose === 'AI_ASSISTANCE' && c.granted),
+        )
         setStatusChecked(true)
       })
       .catch((err: unknown) => {
+        console.error('Assistant status check failed:', err)
         setStatusError(err instanceof ApiError ? err.message : 'Could not reach the assistant service.')
         setStatusChecked(true)
       })
@@ -232,11 +235,26 @@ function AssistantChat(): React.JSX.Element {
     }
   }
 
+  /** Refreshes an inline proposal card after it is decided. */
+  const markProposalDecided = (decided: AiProposal): void => {
+    setTranscript((t) =>
+      t.map((item) =>
+        item.proposals
+          ? {
+              ...item,
+              proposals: item.proposals.map((p) => (p.id === decided.id ? decided : p)),
+            }
+          : item,
+      ),
+    )
+  }
+
   const confirmProposal = async (proposal: AiProposal): Promise<void> => {
     setDeciding(true)
     try {
       const result = await ai.confirmProposal(proposal.id)
       setConfirming(null)
+      markProposalDecided(result)
       setTranscript((t) => [
         ...t,
         {
@@ -265,7 +283,8 @@ function AssistantChat(): React.JSX.Element {
   const rejectProposal = async (proposal: AiProposal): Promise<void> => {
     setDeciding(true)
     try {
-      await ai.rejectProposal(proposal.id)
+      const result = await ai.rejectProposal(proposal.id)
+      markProposalDecided(result)
       await refreshPending()
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Could not reject the proposal.')

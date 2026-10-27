@@ -4,7 +4,6 @@
  * requests, and quick actions. Every figure comes from the backend.
  */
 import { Link } from 'react-router-dom'
-import { ApiError } from '../api/client'
 import { finance, meetings, membership, statements, votes } from '../api/resources'
 import { useAuth } from '../auth/AuthContext'
 import { useGroups } from '../groups/GroupContext'
@@ -264,8 +263,4 @@ export function Dashboard(): React.JSX.Element {
       </div>
     </div>
   )
-}
-
-export function requestErrorMessage(err: unknown): string {
-  return err instanceof ApiError ? err.message : 'Something went wrong.'
 }

@@ -4,7 +4,7 @@
  */
 import { useState } from 'react'
 import type { FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ApiError } from '../api/client'
 import { groups, membership } from '../api/resources'
 import { useGroups } from '../groups/GroupContext'
@@ -18,6 +18,7 @@ import {
 
 export function Groups(): React.JSX.Element {
   const { refresh: refreshContext, selectGroup } = useGroups()
+  const navigate = useNavigate()
   const [creating, setCreating] = useState(false)
   const list = useAsync(() => groups.list(0), [])
 
@@ -34,7 +35,10 @@ export function Groups(): React.JSX.Element {
           onDone={(id) => {
             setCreating(false)
             list.reload()
-            void refreshContext().then(() => selectGroup(id))
+            void refreshContext().then(() => {
+              selectGroup(id)
+              navigate(`/groups/${id}`)
+            })
           }}
         />
       ) : null}

@@ -96,7 +96,7 @@ function ConsentCard(): React.JSX.Element {
   }
 
   const granted = (purpose: string): boolean =>
-    consents.data?.some((c) => c.purpose === purpose && c.granted) ?? false
+    Object.values(consents.data ?? {}).some((c) => c.purpose === purpose && c.granted)
 
   return (
     <section className="card" aria-label="Consent">

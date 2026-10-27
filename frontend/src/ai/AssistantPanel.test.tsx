@@ -37,7 +37,7 @@ describe('AssistantPanel', () => {
         )
       }
       return Promise.resolve(
-        new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } }),
+        new Response(JSON.stringify({}), { status: 200, headers: { 'Content-Type': 'application/json' } }),
       )
     })
     vi.stubGlobal('fetch', fetchMock)
@@ -71,7 +71,7 @@ describe('AssistantPanel', () => {
         )
       }
       return Promise.resolve(
-        new Response(JSON.stringify([]), { status: 200, headers: { 'Content-Type': 'application/json' } }),
+        new Response(JSON.stringify({}), { status: 200, headers: { 'Content-Type': 'application/json' } }),
       )
     })
     vi.stubGlobal('fetch', fetchMock)

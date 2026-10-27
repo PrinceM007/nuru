@@ -23,9 +23,11 @@ import type {
   LedgerSummary,
   Loan,
   Meeting,
+  MeetingNote,
   Member,
   NotificationRecord,
   Page,
+  Participant,
   Preferences,
   Profile,
   Repayment,
@@ -70,7 +72,8 @@ export const users = {
   preferences: () => get<Preferences>('/api/v1/users/me/preferences'),
   updatePreferences: (input: { emailEnabled?: boolean; smsEnabled?: boolean; locale?: string }) =>
     patch<Preferences>('/api/v1/users/me/preferences', input),
-  consents: () => get<Consent[]>('/api/v1/users/me/consents'),
+  /** Latest decision per purpose, keyed by purpose name. */
+  consents: () => get<Record<string, Consent>>('/api/v1/users/me/consents'),
   setConsent: (purpose: string, granted: boolean) =>
     post<Consent>('/api/v1/users/me/consents', { purpose, granted }),
 }
@@ -259,13 +262,13 @@ export const meetings = {
   cancel: (groupId: string, meetingId: string) =>
     post<Meeting>(`/api/v1/groups/${groupId}/meetings/${meetingId}/cancel`, {}),
   attendance: (groupId: string, meetingId: string, userId: string, attendance: string) =>
-    post<Meeting>(`/api/v1/groups/${groupId}/meetings/${meetingId}/attendance/${userId}`, {
+    post<Participant>(`/api/v1/groups/${groupId}/meetings/${meetingId}/attendance/${userId}`, {
       attendance,
     }),
   addNote: (groupId: string, meetingId: string, body: string) =>
-    post<Meeting>(`/api/v1/groups/${groupId}/meetings/${meetingId}/notes`, { body }),
+    post<MeetingNote>(`/api/v1/groups/${groupId}/meetings/${meetingId}/notes`, { body }),
   updateNote: (groupId: string, meetingId: string, noteId: string, body: string) =>
-    patch<Meeting>(`/api/v1/groups/${groupId}/meetings/${meetingId}/notes/${noteId}`, { body }),
+    patch<MeetingNote>(`/api/v1/groups/${groupId}/meetings/${meetingId}/notes/${noteId}`, { body }),
   deleteNote: (groupId: string, meetingId: string, noteId: string) =>
     del<void>(`/api/v1/groups/${groupId}/meetings/${meetingId}/notes/${noteId}`),
 }

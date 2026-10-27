@@ -32,7 +32,7 @@ describe('App routing', () => {
     renderApp('/sign-in')
     expect(await screen.findByRole('heading', { name: 'Sign in' })).toBeInTheDocument()
     expect(screen.getByLabelText(/Email/)).toBeInTheDocument()
-    expect(screen.getByLabelText('Password')).toBeInTheDocument()
+    expect(screen.getByLabelText(/Password/)).toBeInTheDocument()
   })
 
   it('redirects unauthenticated visitors to sign-in', async () => {

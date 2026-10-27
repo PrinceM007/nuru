@@ -60,7 +60,7 @@ unauthorized actions but never relies on that.
 | `PATCH /api/v1/users/me` | self | Yes | `{displayName?, phone?}`. |
 | `GET/PATCH /api/v1/users/me/preferences` | self | PATCH yes | `{emailEnabled, smsEnabled, locale}`; SMS needs a phone number. |
 | `POST /api/v1/users/me/consents` | self | Yes | `{purpose: AI_ASSISTANCE\|IDENTITY_VERIFICATION, granted}`; unknown purpose → 422. |
-| `GET /api/v1/users/me/consents` | self | No | Latest decision per purpose. |
+| `GET /api/v1/users/me/consents` | self | No | Latest decision per purpose, as a map `{PURPOSE: {purpose, granted, recordedAt}}` (empty `{}` when nothing recorded). |
 
 AI chat requires `AI_ASSISTANCE=true` (else 403); verification requires
 `IDENTITY_VERIFICATION=true`.
